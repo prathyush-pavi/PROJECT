@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DigitalGuard — Extension Settings</title>
+  <link rel="stylesheet" href="options.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="layout-wrapper">
+    <header class="settings-header">
+      <div class="brand">
+        <div class="brand-badge">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+        </div>
+        <div>
+          <h1>DigitalGuard Protection Settings</h1>
+          <p>Configure local hybrid AI shield and device telemetry credentials</p>
+        </div>
+      </div>
+      <div class="status-indicator-box">
+        <span class="pulse-dot" id="systemPulse"></span>
+        <span id="systemStatusText">Shield Active</span>
+      </div>
+    </header>
+
+    <main class="settings-grid">
+      <!-- Device Pairing -->
+      <section class="card">
+        <div class="card-header">
+          <div class="card-icon blue">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+              <line x1="8" y1="21" x2="16" y2="21"></line>
+              <line x1="12" y1="17" x2="12" y2="21"></line>
+            </svg>
+          </div>
+          <div>
+            <h2>Device Pairing & Authentication</h2>
+            <p>Connect this browser instance to a child profile</p>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="deviceToken">Device Token (UUID)</label>
+          <div class="input-wrapper">
+            <input type="text" id="deviceToken" placeholder="e.g. 550e8400-e29b-41d4-a716-446655440000" spellcheck="false">
+            <button class="icon-action-btn" id="btnPasteToken" title="Paste from clipboard">📋</button>
+          </div>
+          <span class="helper-text">Obtained from the parental dashboard under Devices &gt; Pair New Device.</span>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label for="apiBaseUrl">Parent Server API URL</label>
+            <input type="text" id="apiBaseUrl" value="http://127.0.0.1:8000">
+          </div>
+          <div class="form-group flex-1">
+            <label for="aiEngineUrl">Local AI Engine Endpoint</label>
+            <input type="text" id="aiEngineUrl" value="http://127.0.0.1:8765">
+          </div>
+        </div>
+
+        <button class="btn btn-outline" id="btnTestConnection">
+          <span>⚡ Test Connection</span>
+        </button>
+        <div id="connResult" class="conn-banner" style="display: none;"></div>
+      </section>
+
+      <!-- Protection Policies -->
+      <section class="card">
+        <div class="card-header">
+          <div class="card-icon amber">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+          </div>
+          <div>
+            <h2>Shield Enforcement Options</h2>
+            <p>On-device heuristics and content intervention filters</p>
+          </div>
+        </div>
+
+        <div class="toggle-row">
+          <div class="toggle-info">
+            <span class="toggle-label">Real-Time Navigation Shield</span>
+            <span class="toggle-desc">Evaluate visited domains and block prohibited sites immediately</span>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="toggleProtection" checked>
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="toggle-row">
+          <div class="toggle-info">
+            <span class="toggle-label">Automated Content Blurring</span>
+            <span class="toggle-desc">Automatically blur flagged adult, cyberbullying, or violent passages</span>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="toggleBlur" checked>
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="toggle-row">
+          <div class="toggle-info">
+            <span class="toggle-label">Suspicious File Download Guard</span>
+            <span class="toggle-desc">Warn and log executable binaries (.exe, .msi, .bat, .ps1)</span>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="toggleDownloads" checked>
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="form-group" style="margin-top: 16px;">
+          <label for="aiSensitivity">AI Toxicity Sensitivity Threshold</label>
+          <div class="range-wrapper">
+            <input type="range" id="aiSensitivity" min="0.3" max="0.9" step="0.05" value="0.65">
+            <span class="range-val" id="sensitivityVal">65%</span>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="actions-bar">
+      <div class="save-status" id="saveStatusText">All configurations synchronized</div>
+      <button class="btn btn-primary" id="btnSaveConfig">
+        Save & Apply Configuration
+      </button>
+    </footer>
+  </div>
+
+  <script src="options.js"></script>
+</body>
+</html>

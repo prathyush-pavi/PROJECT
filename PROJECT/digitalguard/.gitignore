@@ -1,0 +1,95 @@
+# DigitalGuard .gitignore
+
+# Environment / secrets
+.env
+*.env.local
+*.env.production
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+*.manifest
+*.spec
+pip-log.txt
+pip-delete-this-directory.txt
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.log
+.hypothesis/
+.pytest_cache/
+htmlcov/
+
+# Django
+*.sqlite3
+db.sqlite3
+media/
+staticfiles/
+static_collected/
+local_settings.py
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv/
+.virtualenv/
+
+# AI Models (must be downloaded separately — see docs/ai-engine.md)
+models/text/*.onnx
+models/text/*.bin
+models/text/*.pt
+models/image/*.onnx
+models/image/*.bin
+models/image/*.pt
+# Keep directory markers
+!models/text/.gitkeep
+!models/image/.gitkeep
+
+# IDE
+.vscode/settings.json
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Node / Extension build artifacts
+node_modules/
+browser-extension/dist/
+browser-extension/*.crx
+browser-extension/*.zip
+
+# Flutter
+mobile/digitalguard_mobile/.dart_tool/
+mobile/digitalguard_mobile/.flutter-plugins
+mobile/digitalguard_mobile/.flutter-plugins-dependencies
+mobile/digitalguard_mobile/build/
+mobile/digitalguard_mobile/.packages
+mobile/digitalguard_mobile/.pub-cache/
+mobile/digitalguard_mobile/.pub/
+
+# Logs
+logs/
+*.log
+desktop-agent/digitalguard.log
+
+# Native messaging
+desktop-agent/com.digitalguard.agent.json.local
+
+# Temporary
+*.tmp
+*.bak
+scratch/

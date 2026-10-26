@@ -1,0 +1,16 @@
+[
+  "tests/ai_engine/test_analyzer.py::test_ai_pipeline_initialization",
+  "tests/ai_engine/test_analyzer.py::test_text_analysis_harmful_keyword_mock",
+  "tests/ai_engine/test_analyzer.py::test_text_analysis_safe_content",
+  "tests/ai_engine/test_analyzer.py::test_url_analysis_phishing_heuristic",
+  "tests/ai_engine/test_analyzer.py::test_url_analysis_safe",
+  "tests/backend/test_api.py::test_api_health_root",
+  "tests/backend/test_api.py::test_parent_registration_and_login",
+  "tests/backend/test_models.py::test_activity_log_creation",
+  "tests/backend/test_models.py::test_device_token_rotation",
+  "tests/backend/test_models.py::test_user_creation",
+  "tests/desktop_agent/test_windows_agent.py::test_policy_engine_application_block",
+  "tests/desktop_agent/test_windows_agent.py::test_policy_engine_screentime_limit",
+  "tests/desktop_agent/test_windows_agent.py::test_screentime_tracker_accumulation",
+  "tests/desktop_agent/test_windows_agent.py::test_screentime_tracker_idle_discount"
+]

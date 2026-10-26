@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DigitalGuard — Parental Control Dashboard</title>
+  <meta name="description" content="DigitalGuard Privacy-First Parental Control Dashboard — Monitor and protect your children's digital activity.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+  <!-- ── Login Screen ─────────────────────────────────────────────────────── -->
+  <div id="login-screen" class="screen active">
+    <div class="login-bg">
+      <div class="login-orb orb-1"></div>
+      <div class="login-orb orb-2"></div>
+      <div class="login-orb orb-3"></div>
+    </div>
+    <div class="login-card">
+      <div class="login-logo">
+        <div class="logo-icon">🛡️</div>
+        <h1>DigitalGuard</h1>
+        <p>Privacy-First Parental Control</p>
+      </div>
+      <form id="login-form" class="login-form">
+        <div id="login-error" class="alert alert-error" style="display:none"></div>
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" id="login-email" placeholder="parent@example.com" autocomplete="email" required>
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="login-password" placeholder="••••••••" autocomplete="current-password" required>
+        </div>
+        <button type="submit" class="btn btn-primary btn-full" id="login-btn">
+          <span class="btn-text">Sign In</span>
+          <span class="btn-spinner" style="display:none">⟳</span>
+        </button>
+        <button type="button" class="btn btn-secondary btn-full mt-4" id="passkey-login-btn">
+          🔑 Sign In with Passkey
+        </button>
+        <div class="login-divider">or</div>
+        <button type="button" class="btn btn-secondary btn-full" id="demo-btn">
+          🎭 Load Demo Data
+        </button>
+      </form>
+      <p class="login-footer">Don't have an account? <a href="#" id="show-register">Register</a></p>
+    </div>
+  </div>
+
+  <!-- ── Register Screen ───────────────────────────────────────────────────── -->
+  <div id="register-screen" class="screen">
+    <div class="login-bg">
+      <div class="login-orb orb-1"></div>
+      <div class="login-orb orb-2"></div>
+    </div>
+    <div class="login-card">
+      <div class="login-logo">
+        <div class="logo-icon">🛡️</div>
+        <h1>Create Account</h1>
+        <p>Join DigitalGuard</p>
+      </div>
+      <form id="register-form" class="login-form">
+        <div id="register-error" class="alert alert-error" style="display:none"></div>
+        <div id="register-success" class="alert alert-success" style="display:none"></div>
+        <div class="form-group">
+          <label>Display Name</label>
+          <input type="text" id="reg-name" placeholder="Your name" required>
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="reg-email" placeholder="parent@example.com" required>
+        </div>
+        <div class="form-group">
+          <label>Username</label>
+          <input type="text" id="reg-username" placeholder="username" required>
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="reg-password" placeholder="Min 8 characters" required>
+        </div>
+        <div class="form-group">
+          <label>Confirm Password</label>
+          <input type="password" id="reg-password2" placeholder="Repeat password" required>
+        </div>
+        <button type="submit" class="btn btn-primary btn-full">Create Account</button>
+      </form>
+      <p class="login-footer">Already have an account? <a href="#" id="show-login">Sign In</a></p>
+    </div>
+  </div>
+
+  <!-- ── Main App ──────────────────────────────────────────────────────────── -->
+  <div id="app-screen" class="screen">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-logo">
+        <div class="sidebar-logo-icon">🛡️</div>
+        <div class="sidebar-logo-text">
+          <span class="sidebar-logo-name">DigitalGuard</span>
+          <span class="sidebar-logo-sub">Parental Control</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-section-label">Monitor</div>
+        <a href="#" class="nav-item active" data-page="overview" id="nav-overview">
+          <span class="nav-icon">📊</span><span class="nav-label">Overview</span>
+        </a>
+        <a href="#" class="nav-item" data-page="activity" id="nav-activity">
+          <span class="nav-icon">📋</span><span class="nav-label">Activity</span>
+          <span class="nav-badge" id="badge-activity" style="display:none"></span>
+        </a>
+        <a href="#" class="nav-item" data-page="alerts" id="nav-alerts">
+          <span class="nav-icon">🔔</span><span class="nav-label">Alerts</span>
+          <span class="nav-badge" id="badge-alerts" style="display:none"></span>
+        </a>
+        <a href="#" class="nav-item" data-page="screentime" id="nav-screentime">
+          <span class="nav-icon">⏱️</span><span class="nav-label">Screen Time</span>
+        </a>
+
+        <div class="nav-section-label">Control</div>
+        <a href="#" class="nav-item" data-page="websites" id="nav-websites">
+          <span class="nav-icon">🌐</span><span class="nav-label">Websites</span>
+        </a>
+        <a href="#" class="nav-item" data-page="applications" id="nav-applications">
+          <span class="nav-icon">📱</span><span class="nav-label">Applications</span>
+        </a>
+        <a href="#" class="nav-item" data-page="reports" id="nav-reports">
+          <span class="nav-icon">📈</span><span class="nav-label">Reports</span>
+        </a>
+
+        <div class="nav-section-label">Setup</div>
+        <a href="#" class="nav-item" data-page="devices" id="nav-devices">
+          <span class="nav-icon">💻</span><span class="nav-label">Devices</span>
+        </a>
+        <a href="#" class="nav-item" data-page="children" id="nav-children">
+          <span class="nav-icon">👨‍👧</span><span class="nav-label">Children</span>
+        </a>
+        <a href="#" class="nav-item" data-page="settings" id="nav-settings">
+          <span class="nav-icon">⚙️</span><span class="nav-label">Settings</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="sidebar-user" id="sidebar-user">
+          <div class="user-avatar" id="user-avatar">👤</div>
+          <div class="user-info">
+            <span class="user-name" id="user-name">Loading...</span>
+            <span class="user-role">Parent</span>
+          </div>
+          <button class="btn-logout" id="logout-btn" title="Logout">⏻</button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main content -->
+    <main class="main-content">
+      <!-- Top bar -->
+      <header class="topbar">
+        <button class="sidebar-toggle" id="sidebar-toggle">☰</button>
+        <div class="topbar-title" id="topbar-title">Overview</div>
+        <div class="topbar-actions">
+          <div class="topbar-child-select">
+            <label class="sr-only">Select Child</label>
+            <select id="child-filter" class="select-input">
+              <option value="">All Children</option>
+            </select>
+          </div>
+          <button class="btn btn-icon btn-sm" id="refresh-btn" title="Refresh">🔄</button>
+          <div class="alert-indicator" id="alert-indicator" style="display:none">
+            <span class="alert-count" id="alert-count-top">0</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- Pages -->
+      <div class="page-container">
+
+        <!-- ── Overview Page ──────────────────────────────────────── -->
+        <div class="page active" id="page-overview">
+          <div class="page-header">
+            <h2>Today's Overview</h2>
+            <span class="page-date" id="today-date"></span>
+          </div>
+
+          <!-- Stats cards -->
+          <div class="stats-grid" id="stats-grid">
+            <div class="stat-card stat-blue">
+              <div class="stat-card-icon">📋</div>
+              <div class="stat-card-body">
+                <div class="stat-card-value" id="stat-total">-</div>
+                <div class="stat-card-label">Total Events</div>
+              </div>
+            </div>
+            <div class="stat-card stat-green">
+              <div class="stat-card-icon">🌐</div>
+              <div class="stat-card-body">
+                <div class="stat-card-value" id="stat-visited-dash">-</div>
+                <div class="stat-card-label">Sites Visited</div>
+              </div>
+            </div>
+            <div class="stat-card stat-red">
+              <div class="stat-card-icon">🚫</div>
+              <div class="stat-card-body">
+                <div class="stat-card-value" id="stat-blocked-dash">-</div>
+                <div class="stat-card-label">Sites Blocked</div>
+              </div>
+            </div>
+            <div class="stat-card stat-orange">
+              <div class="stat-card-icon">⚠️</div>
+              <div class="stat-card-body">
+                <div class="stat-card-value" id="stat-threats">-</div>
+                <div class="stat-card-label">Threats Detected</div>
+              </div>
+            </div>
+            <div class="stat-card stat-purple">
+              <div class="stat-card-icon">⏱️</div>
+              <div class="stat-card-body">
+                <div class="stat-card-value" id="stat-screentime">-</div>
+                <div class="stat-card-label">Screen Time</div>
+              </div>
+            </div>
+            <div class="stat-card stat-yellow">
+              <div class="stat-card-icon">🔔</div>
+              <div class="stat-card-body">
+                <div class="stat-card-value" id="stat-unread-alerts">-</div>
+                <div class="stat-card-label">Unread Alerts</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Children summary -->
+          <div class="section-header">
+            <h3>Children</h3>
+          </div>
+          <div class="children-grid" id="children-grid">
+            <div class="loading-placeholder">Loading children...</div>
+          </div>
+
+          <!-- Recent events -->
+          <div class="section-header">
+            <h3>Recent Events</h3>
+            <a href="#" class="link-view-all" data-page="activity">View All →</a>
+          </div>
+          <div class="events-list" id="recent-events">
+            <div class="loading-placeholder">Loading events...</div>
+          </div>
+        </div>
+
+        <!-- ── Activity Page ───────────────────────────────────────── -->
+        <div class="page" id="page-activity">
+          <div class="page-header">
+            <h2>Activity Log</h2>
+          </div>
+          <div class="filter-bar">
+            <select class="select-input" id="filter-event-type">
+              <option value="">All Events</option>
+              <option value="WEBSITE_VISITED">Website Visited</option>
+              <option value="WEBSITE_BLOCKED">Website Blocked</option>
+              <option value="PHISHING_DETECTED">Phishing Detected</option>
+              <option value="CYBERBULLYING_DETECTED">Cyberbullying</option>
+              <option value="GROOMING_RISK_DETECTED">Grooming Risk</option>
+              <option value="CONTENT_FLAGGED">Content Flagged</option>
+              <option value="APPLICATION_BLOCKED">App Blocked</option>
+              <option value="SCREEN_TIME_LIMIT_REACHED">Screen Time Limit</option>
+            </select>
+            <select class="select-input" id="filter-severity">
+              <option value="">All Severities</option>
+              <option value="LOW">Low</option>
+              <option value="MEDIUM">Medium</option>
+              <option value="HIGH">High</option>
+              <option value="CRITICAL">Critical</option>
+            </select>
+            <input type="date" class="select-input" id="filter-start-date">
+            <input type="date" class="select-input" id="filter-end-date">
+            <button class="btn btn-primary btn-sm" id="apply-filters">Filter</button>
+            <button class="btn btn-secondary btn-sm" id="clear-filters">Clear</button>
+          </div>
+          <div class="activity-table-wrap">
+            <table class="activity-table" id="activity-table">
+              <thead>
+                <tr>
+                  <th>Time</th>
+                  <th>Event</th>
+                  <th>Domain / App</th>
+                  <th>Category</th>
+                  <th>Severity</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="activity-tbody">
+                <tr><td colspan="6" class="loading-cell">Loading activity...</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="pagination" id="activity-pagination"></div>
+        </div>
+
+        <!-- ── Alerts Page ─────────────────────────────────────────── -->
+        <div class="page" id="page-alerts">
+          <div class="page-header">
+            <h2>Alerts</h2>
+            <button class="btn btn-secondary btn-sm" id="mark-all-read-btn">Mark All Read</button>
+          </div>
+          <div class="alerts-list" id="alerts-list">
+            <div class="loading-placeholder">Loading alerts...</div>
+          </div>
+        </div>
+
+        <!-- ── Screen Time Page ────────────────────────────────────── -->
+        <div class="page" id="page-screentime">
+          <div class="page-header">
+            <h2>Screen Time</h2>
+          </div>
+          <div class="chart-grid">
+            <div class="chart-card">
+              <div class="chart-title">Daily Usage (Last 7 Days)</div>
+              <canvas id="screentime-chart" height="200"></canvas>
+            </div>
+            <div class="chart-card">
+              <div class="chart-title">App Breakdown</div>
+              <canvas id="app-breakdown-chart" height="200"></canvas>
+            </div>
+          </div>
+          <div class="section-header">
+            <h3>Screen Time Policies</h3>
+            <button class="btn btn-primary btn-sm" id="add-screentime-policy-btn">+ Add Policy</button>
+          </div>
+          <div id="screentime-policies-list">
+            <div class="loading-placeholder">Loading policies...</div>
+          </div>
+        </div>
+
+        <!-- ── Websites Page ───────────────────────────────────────── -->
+        <div class="page" id="page-websites">
+          <div class="page-header">
+            <h2>Website Policies</h2>
+            <button class="btn btn-primary btn-sm" id="add-website-btn">+ Add Rule</button>
+          </div>
+          <div class="filter-bar">
+            <select class="select-input" id="filter-policy-type">
+              <option value="">All Types</option>
+              <option value="BLOCK">Block</option>
+              <option value="ALLOW">Allow</option>
+              <option value="WARN">Warn</option>
+            </select>
+          </div>
+          <div class="policies-table-wrap">
+            <table class="activity-table">
+              <thead>
+                <tr>
+                  <th>Domain / Category</th>
+                  <th>Rule</th>
+                  <th>Child</th>
+                  <th>Reason</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="websites-tbody">
+                <tr><td colspan="5" class="loading-cell">Loading policies...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ── Applications Page ───────────────────────────────────── -->
+        <div class="page" id="page-applications">
+          <div class="page-header">
+            <h2>Application Policies</h2>
+            <button class="btn btn-primary btn-sm" id="add-app-btn">+ Add Rule</button>
+          </div>
+          <div class="policies-table-wrap">
+            <table class="activity-table">
+              <thead>
+                <tr>
+                  <th>Application</th>
+                  <th>Policy</th>
+                  <th>Daily Limit</th>
+                  <th>Child</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="apps-tbody">
+                <tr><td colspan="5" class="loading-cell">Loading policies...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ── Reports Page ────────────────────────────────────────── -->
+        <div class="page" id="page-reports">
+          <div class="page-header">
+            <h2>Reports</h2>
+            <button class="btn btn-primary btn-sm" id="generate-report-btn">+ Generate Report</button>
+          </div>
+          <div id="reports-list">
+            <div class="loading-placeholder">Loading reports...</div>
+          </div>
+        </div>
+
+        <!-- ── Devices Page ────────────────────────────────────────── -->
+        <div class="page" id="page-devices">
+          <div class="page-header">
+            <h2>Devices</h2>
+            <button class="btn btn-primary btn-sm" id="add-device-btn">+ Add Device</button>
+          </div>
+          <div class="devices-grid" id="devices-grid">
+            <div class="loading-placeholder">Loading devices...</div>
+          </div>
+        </div>
+
+        <!-- ── Children Page ───────────────────────────────────────── -->
+        <div class="page" id="page-children">
+          <div class="page-header">
+            <h2>Children</h2>
+            <button class="btn btn-primary btn-sm" id="add-child-btn">+ Add Child</button>
+          </div>
+          <div class="children-manage-grid" id="children-manage-grid">
+            <div class="loading-placeholder">Loading...</div>
+          </div>
+        </div>
+
+        <!-- ── Settings Page ───────────────────────────────────────── -->
+        <div class="page" id="page-settings">
+          <div class="page-header">
+            <h2>Settings</h2>
+          </div>
+          <div class="settings-grid">
+            <div class="settings-card">
+              <h3 class="settings-card-title">👤 Account</h3>
+              <div class="form-group">
+                <label>Display Name</label>
+                <input type="text" id="setting-display-name" class="form-input" placeholder="Your name">
+              </div>
+              <div class="form-group">
+                <label>Notification Email</label>
+                <input type="email" id="setting-notif-email" class="form-input" placeholder="alerts@example.com">
+              </div>
+              <button class="btn btn-primary btn-sm" id="save-account-btn">Save Changes</button>
+            </div>
+            <div class="settings-card">
+              <h3 class="settings-card-title">🔔 Alert Preferences</h3>
+              <div class="toggle-row">
+                <span>Phishing Alerts</span>
+                <label class="toggle"><input type="checkbox" id="pref-phishing" checked><span class="toggle-slider"></span></label>
+              </div>
+              <div class="toggle-row">
+                <span>Cyberbullying Alerts</span>
+                <label class="toggle"><input type="checkbox" id="pref-cyberbullying" checked><span class="toggle-slider"></span></label>
+              </div>
+              <div class="toggle-row">
+                <span>Grooming Risk Alerts</span>
+                <label class="toggle"><input type="checkbox" id="pref-grooming" checked><span class="toggle-slider"></span></label>
+              </div>
+              <div class="toggle-row">
+                <span>Screen Time Alerts</span>
+                <label class="toggle"><input type="checkbox" id="pref-screentime" checked><span class="toggle-slider"></span></label>
+              </div>
+              <div class="toggle-row">
+                <span>App Blocked Alerts</span>
+                <label class="toggle"><input type="checkbox" id="pref-app" checked><span class="toggle-slider"></span></label>
+              </div>
+              <button class="btn btn-primary btn-sm mt-8" id="save-prefs-btn">Save Preferences</button>
+            </div>
+            <div class="settings-card">
+              <h3 class="settings-card-title">🤖 AI Engine</h3>
+              <div class="setting-info-row">
+                <span>Inference Mode</span>
+                <span class="badge badge-warn" id="ai-mode-badge">Checking...</span>
+              </div>
+              <div class="setting-info-row">
+                <span>AI Engine Status</span>
+                <span class="badge badge-grey" id="ai-status-badge">Unknown</span>
+              </div>
+              <p class="settings-note">⚠️ MOCK mode uses keyword heuristics only. Install a real ONNX model for production. See <code>docs/ai-engine.md</code>.</p>
+            </div>
+            <div class="settings-card">
+              <div class="flex-between">
+                <h3 class="settings-card-title">🔑 Passkeys / Security Keys</h3>
+                <button class="btn btn-primary btn-sm" id="register-passkey-btn">+ Register Passkey</button>
+              </div>
+              <p class="settings-note">Use Touch ID, Face ID, Windows Hello, or a USB Security Key (YubiKey) for passwordless login.</p>
+              <div id="passkeys-list" class="passkeys-list mt-8">
+                <div class="loading-placeholder">Loading passkeys...</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /page-container -->
+    </main>
+  </div>
+
+  <!-- ── Modals ─────────────────────────────────────────────────────────────── -->
+  <div class="modal-overlay" id="modal-overlay" style="display:none">
+    <div class="modal" id="modal">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modal-title">Modal</h3>
+        <button class="modal-close" id="modal-close">✕</button>
+      </div>
+      <div class="modal-body" id="modal-body"></div>
+    </div>
+  </div>
+
+  <!-- ── Toast ─────────────────────────────────────────────────────────────── -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

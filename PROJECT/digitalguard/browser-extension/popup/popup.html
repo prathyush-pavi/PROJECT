@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DigitalGuard</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 340px;
+      min-height: 480px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      background: linear-gradient(135deg, #0f0f23 0%, #1a1a3e 50%, #0d0d1f 100%);
+      color: #fff;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .header-logo { font-size: 28px; }
+    .header-text h1 { font-size: 16px; font-weight: 700; letter-spacing: -0.3px; }
+    .header-text p { font-size: 11px; opacity: 0.85; margin-top: 2px; }
+    .header-toggle {
+      margin-left: auto;
+      width: 44px; height: 24px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 12px;
+      cursor: pointer;
+      position: relative;
+      transition: background 0.3s;
+      border: none;
+    }
+    .header-toggle.on { background: rgba(255,255,255,0.4); }
+    .header-toggle::after {
+      content: '';
+      position: absolute;
+      top: 3px; left: 3px;
+      width: 18px; height: 18px;
+      background: #fff;
+      border-radius: 50%;
+      transition: transform 0.3s;
+    }
+    .header-toggle.on::after { transform: translateX(20px); }
+
+    .status-card {
+      margin: 16px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
+      padding: 16px;
+    }
+    .status-url {
+      font-size: 12px;
+      color: rgba(255,255,255,0.5);
+      margin-bottom: 8px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .status-badge.safe { background: rgba(0,212,136,0.15); color: #00d488; border: 1px solid rgba(0,212,136,0.3); }
+    .status-badge.warning { background: rgba(253,203,110,0.15); color: #fdcb6e; border: 1px solid rgba(253,203,110,0.3); }
+    .status-badge.blocked { background: rgba(255,107,53,0.15); color: #ff6b35; border: 1px solid rgba(255,107,53,0.3); }
+    .status-badge.checking { background: rgba(162,155,254,0.15); color: #a29bfe; border: 1px solid rgba(162,155,254,0.3); }
+    .risk-bar-wrap { margin-top: 12px; }
+    .risk-bar-label { font-size: 11px; color: rgba(255,255,255,0.5); margin-bottom: 4px; display: flex; justify-content: space-between; }
+    .risk-bar { height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden; }
+    .risk-bar-fill { height: 100%; border-radius: 3px; transition: width 0.5s ease; }
+    .risk-low .risk-bar-fill { background: linear-gradient(90deg, #00d488, #00b894); }
+    .risk-med .risk-bar-fill { background: linear-gradient(90deg, #fdcb6e, #e17055); }
+    .risk-high .risk-bar-fill { background: linear-gradient(90deg, #ff6b35, #d63031); }
+
+    .section { margin: 0 16px 16px; }
+    .section-title {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.4);
+      margin-bottom: 8px;
+    }
+    .stat-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .stat-item {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px;
+      padding: 12px;
+      text-align: center;
+    }
+    .stat-value { font-size: 22px; font-weight: 700; color: #a29bfe; }
+    .stat-label { font-size: 10px; color: rgba(255,255,255,0.4); margin-top: 2px; }
+
+    .action-row { display: flex; gap: 8px; margin: 0 16px 16px; }
+    .action-btn {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 10px;
+      background: rgba(255,255,255,0.05);
+      color: rgba(255,255,255,0.8);
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: center;
+    }
+    .action-btn:hover { background: rgba(108,92,231,0.2); border-color: rgba(108,92,231,0.4); color: #fff; }
+
+    .footer {
+      padding: 12px 16px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .footer-text { font-size: 10px; color: rgba(255,255,255,0.3); }
+    .mock-badge {
+      background: rgba(253,203,110,0.15);
+      color: #fdcb6e;
+      border: 1px solid rgba(253,203,110,0.3);
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 10px;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="header-logo">🛡️</div>
+    <div class="header-text">
+      <h1>DigitalGuard</h1>
+      <p id="protection-label">Protection Active</p>
+    </div>
+    <button class="header-toggle on" id="toggle-protection" title="Toggle protection"></button>
+  </div>
+
+  <div class="status-card">
+    <div class="status-url" id="current-url">Loading...</div>
+    <div class="status-badge checking" id="status-badge">
+      <span id="status-icon">◌</span>
+      <span id="status-text">Checking...</span>
+    </div>
+    <div class="risk-bar-wrap">
+      <div class="risk-bar-label">
+        <span>Risk Score</span>
+        <span id="risk-score-label">0%</span>
+      </div>
+      <div class="risk-bar risk-low" id="risk-bar-container">
+        <div class="risk-bar-fill" id="risk-bar-fill" style="width: 0%"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Today's Activity</div>
+    <div class="stat-row">
+      <div class="stat-item">
+        <div class="stat-value" id="stat-visited">-</div>
+        <div class="stat-label">Visited</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value" id="stat-blocked">-</div>
+        <div class="stat-label">Blocked</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="action-row">
+    <button class="action-btn" id="btn-report">📊 Report Issue</button>
+    <button class="action-btn" id="btn-settings">⚙️ Settings</button>
+  </div>
+
+  <div class="footer">
+    <span class="footer-text">DigitalGuard v1.0</span>
+    <span class="mock-badge" id="inference-mode-badge" style="display:none">⚠️ MOCK</span>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

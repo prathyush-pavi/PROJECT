@@ -1,0 +1,67 @@
+{
+  "manifest_version": 3,
+  "name": "DigitalGuard",
+  "version": "1.0.0",
+  "description": "DigitalGuard — Privacy-first browser security and parental control extension. Protects children with local AI-powered content analysis.",
+
+  "icons": {
+    "16": "assets/icons/icon16.png",
+    "32": "assets/icons/icon32.png",
+    "48": "assets/icons/icon48.png",
+    "128": "assets/icons/icon128.png"
+  },
+
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_icon": {
+      "16": "assets/icons/icon16.png",
+      "32": "assets/icons/icon32.png",
+      "48": "assets/icons/icon48.png"
+    },
+    "default_title": "DigitalGuard Protection"
+  },
+
+  "background": {
+    "service_worker": "background/service_worker.js",
+    "type": "module"
+  },
+
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content/content_script.js"],
+      "run_at": "document_idle",
+      "all_frames": false
+    }
+  ],
+
+  "permissions": [
+    "webNavigation",
+    "downloads",
+    "storage",
+    "tabs",
+    "activeTab",
+    "nativeMessaging"
+  ],
+
+  "host_permissions": [
+    "http://127.0.0.1:8000/*",
+    "http://localhost:8000/*"
+  ],
+
+  "web_accessible_resources": [
+    {
+      "resources": ["content/blocked.html", "content/blocked.css", "assets/*"],
+      "matches": ["<all_urls>"]
+    }
+  ],
+
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'none';"
+  },
+
+  "options_ui": {
+    "page": "options/options.html",
+    "open_in_tab": true
+  }
+}
